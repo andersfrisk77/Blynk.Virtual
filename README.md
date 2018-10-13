@@ -52,7 +52,6 @@ to send message messages like (manually send by pressing enter):
 15 1000
 15 101.33
 15 -1.3
-10 123
 
 4. Start the device inside the smart phone application. If everything is ok, then the values will show up in the "Value Display" widget.
 
