@@ -1,5 +1,5 @@
 This is a small library together with some simple apps used together with the Blynk server. The library is based on BlynkLibrary by
-Sverre Frøystein together with standard TCP client in .NET core. The client will only use virtual pins.
+Sverre FrÃ¸ystein together with standard TCP client in .NET core. The client will only use virtual pins.
 
 The Blynk application for a Iphone or Android device is a very convinient way of handling IOT devices. Read more on https://www.blynk.cc/.
 
@@ -52,5 +52,6 @@ to send message messages like (manually send by pressing enter):
 15 1000
 15 101.33
 15 -1.3
+10 123
 
 4. Start the device inside the smart phone application. If everything is ok, then the values will show up in the "Value Display" widget.
