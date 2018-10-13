@@ -55,3 +55,4 @@ to send message messages like (manually send by pressing enter):
 10 123
 
 4. Start the device inside the smart phone application. If everything is ok, then the values will show up in the "Value Display" widget.
+
