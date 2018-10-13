@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 
-namespace BlynkMinimalLibrary
+namespace Blynk.Virtual
 {
     public class Client : IDisposable
     {

@@ -1,19 +1,13 @@
-﻿using BlynkMinimalLibrary;
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using PowerArgs;
+using Blynk.Virtual;
 
-namespace BlynkRepeater
+namespace Blynk.Tester
 {
     [ArgExceptionBehavior(ArgExceptionPolicy.StandardExceptionHandling)]
     public class Options
     {
-        [ArgShortcut("p")]
-        [ArgShortcut("--port")]
-        [ArgDefaultValue(8000)]
-        [ArgDescription("Listening port for the Udp server.")]
-        public ushort Port { get; set; }
-
         [ArgShortcut("s")]
         [ArgShortcut("--server")]
         [ArgDefaultValue("tcp://127.0.0.1:8080")]
@@ -28,13 +22,12 @@ namespace BlynkRepeater
 
     }
 
-
     class Program
     {
         static void Main(string[] args)
         {
             Options options = null;
-            try 
+            try
             {
                options = Args.Parse<Options>(args);
             }
@@ -43,14 +36,11 @@ namespace BlynkRepeater
               Console.WriteLine(string.Format("Problems with the command line options: {0}", e.Message));
               Console.WriteLine(ArgUsage.GenerateUsageFromTemplate<Options>());
               return;
-            }            
-            ushort port = options.Port; // Udp server listen to port
+            }
             var url = options.Server; // Blynk server address
             var authorization = options.Authorization; // Authorization token
-            using (var udpServer = new UdpServer(port))
             using (var client = new Client(url, authorization))
             {
-                udpServer.Start();
                 client.Connect();
                 var tcs = new TaskCompletionSource<bool>();
                 client.OnAuthorized += v => tcs.SetResult(v);
@@ -59,27 +49,31 @@ namespace BlynkRepeater
                 if (authorized)
                 {
                     Console.WriteLine("Hardware client is authorized with given token");
-                    Console.WriteLine($"Listen to port {port}");
-                    udpServer.OnVirtualPin += (id, value) =>
+
+                    client.OnVirtualWritePin += (id, value) =>
                     {
-                        client.WriteVirtualPin(id, value);
-//                        Console.WriteLine($"Virtual pin {id} with value {value}");
+                        Console.WriteLine($"Write Pin {id} has value {value}");
+                    };
+                    var counter = 0;
+                    client.OnVirtualReadPin += id =>
+                    {
+                        Console.WriteLine($"Read Pin {id}");
+                        client.WriteVirtualPin(id, counter++);
                     };
                     var closeTcs = new System.Threading.Tasks.TaskCompletionSource<bool>();
                     Console.CancelKeyPress += (o, e) =>
                     {
                       closeTcs.SetResult(true);
                     };
-                    Console.WriteLine("Repeater is active. Press CTRL+C to stop.");
+                    Console.WriteLine("Test server is active. Press CTRL+C to stop.");
                     closeTcs.Task.Wait();
-                    Console.WriteLine("Stopping repeater.");   
+                    Console.WriteLine("Stopping Test server.");
                 }
                 else
                 {
                     Console.WriteLine("Cannot authorize client with given token.");
                 }
                 client.Disconnect();
-                udpServer.Stop();
             }
         }
     }

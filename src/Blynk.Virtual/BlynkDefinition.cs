@@ -22,7 +22,7 @@
 //  SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 using System.Collections.Generic;
 
-namespace BlynkMinimalLibrary
+namespace Blynk.Virtual
 {
     // This file holdes the enum definitions used within the Blynk Library
 
