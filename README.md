@@ -49,8 +49,10 @@ nc 127.0.0.1 8000 -u
 
 to send message messages like (manually send by pressing enter):
 
-15 1000 \r\n
+15 1000
+
 15 101.33
+
 15 -1.4
 10 123
 11 0
