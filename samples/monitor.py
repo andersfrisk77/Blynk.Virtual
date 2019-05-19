@@ -61,7 +61,7 @@ def onChange(channel):
         all = "Now " + str(dateNow) + " Falling delta=" + str(delta) + " [s] power=" + str(ipower) + " [W]"
         Log (all)
         try:
-         message = str(pin) + " " + str(power)
+         message = str(pin) + " " + str(round(power,1))
          bytes = message.encode()
          sock.sendto(bytes, (UDP_IP, UDP_PORT))
         except:
