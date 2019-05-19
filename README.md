@@ -39,8 +39,8 @@ is sent (for example, 15 33.2), then the virtual pin id will push the value to a
    1. Go to the Blynk.Repeater folder.
    2. Run "dotnet build samples/Blynk.Repeater/Blynk.Repeater.csproj"
    3. Run "dotnet publish samples/Blynk.Repeater/Blynk.Repeater.csproj -r [rid]". Here [rid] is specified target platform (for example , win10-x64 (for Windows 10 x64) or linux-arm (for Raspberry pi)).
-   4. Go to the publish folder and run "./BlynkRepeater -a [token] -s [server] -p [port]". Here [token] is the authorization token given by a project. [server] is the Blynk server application tcp-url. 
-      [port] is the listening port for the udp server. 
+   4. Go to the publish folder and run "./BlynkRepeater -a [token] -s [server] -p [port]". Here [token] is the authorization token given by a project. [server] is the Blynk server application tcp-url. [port] is the listening port for the udp server. Only the token is a mandatory argument (in this case server is defaulted to tcp://127.0.0.1:8080 and port to 8000).  
+      
 
 
 3. Use Netcat command: 
