@@ -38,7 +38,6 @@ namespace Telldus
 
             Console.ReadKey();
 
-
             Options options = null;
             try
             {
