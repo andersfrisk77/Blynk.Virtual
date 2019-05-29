@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blynk.Repeater", "samples\B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blynk.Tester", "samples\Blynk.Tester\Blynk.Tester.csproj", "{FD4B6B1C-032F-4BC2-8A5A-324EA322A754}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Telldus", "Telldus\Telldus.csproj", "{6BD64FF0-CCED-4BC5-84D2-EDE6DD666CE7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blynk.Telldus", "samples\Blynk.Telldus\Blynk.Telldus.csproj", "{2AF85756-F5E7-4C17-AE8F-1474EFA053CD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +35,10 @@ Global
 		{FD4B6B1C-032F-4BC2-8A5A-324EA322A754}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD4B6B1C-032F-4BC2-8A5A-324EA322A754}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD4B6B1C-032F-4BC2-8A5A-324EA322A754}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6BD64FF0-CCED-4BC5-84D2-EDE6DD666CE7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6BD64FF0-CCED-4BC5-84D2-EDE6DD666CE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6BD64FF0-CCED-4BC5-84D2-EDE6DD666CE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6BD64FF0-CCED-4BC5-84D2-EDE6DD666CE7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2AF85756-F5E7-4C17-AE8F-1474EFA053CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AF85756-F5E7-4C17-AE8F-1474EFA053CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AF85756-F5E7-4C17-AE8F-1474EFA053CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AF85756-F5E7-4C17-AE8F-1474EFA053CD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
