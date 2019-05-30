@@ -18,26 +18,25 @@ namespace Telldus
         [ArgShortcut("a")]
         [ArgShortcut("--authorization")]
         [ArgDefaultValue("****")]
-        [ArgDescription("The device authorization token used to identitify the repeater.")]
+        [ArgDescription("The device authorization token used to identitify this application.")]
         public string Authorization { get; set; }
+
+        [ArgShortcut("t")]
+        [ArgShortcut("--telldus")]
+        [ArgDefaultValue("ws://192.168.1.17/ws")]
+        [ArgDescription("The Telldus websocket device uri.")]
+        public string Telldus { get; set; }
+
+        [ArgShortcut("d")]
+        [ArgShortcut("--debug")]
+        [ArgDescription("Show debug information.")]
+        public bool Debug { get; set; }
 
     }
     class Program
     {
         static void Main(string[] args)
         {
-            var uri = "ws://192.168.1.17/ws";
-            using (var ws = new TelldusClient(uri))
-            {
-                ws.ConnectAsync().Wait();
-                ws.OnMessage += m => Console.WriteLine(m.ToString());
-                ws.StartMessageLoop();
-                Console.ReadKey();
-                ws.CloseAsync().Wait();
-            }
-
-            Console.ReadKey();
-
             Options options = null;
             try
             {
@@ -63,18 +62,58 @@ namespace Telldus
                     Console.WriteLine("Hardware client is authorized with given token");
 
 
-                    // TODO
-                    
-
-
-                    var closeTcs = new System.Threading.Tasks.TaskCompletionSource<bool>();
-                    Console.CancelKeyPress += (o, e) =>
+                    using (var ws = new TelldusClient(options.Telldus))
                     {
-                        closeTcs.SetResult(true);
-                    };
-                    Console.WriteLine("Test server is active. Press CTRL+C to stop.");
-                    closeTcs.Task.Wait();
-                    Console.WriteLine("Stopping Test server.");
+                        ws.ConnectAsync().Wait();
+                        ws.OnMessage += m =>
+                        {
+                            var id = (int)m["id"];
+                            var type = (string)m["type"];
+                            var time = (string)m["time"];
+                            var name = (string)m["name"];
+                            if (type == "device")
+                            {
+                                var state = (int)m["state"];
+                                switch (state)
+                                {
+                                    case 1:
+                                        client.WriteVirtualPin(id, $"{time} {name} on\r\n");
+                                        break;
+                                    case 2:
+                                        client.WriteVirtualPin(id, $"{time} {name} off\r\n");
+                                        break;
+                                    default:
+                                        client.WriteVirtualPin(id, $"{time} {name} other state {state}\r\n");
+                                        break;
+                                }
+                            }
+                            else if (type == "sensor")
+                            {
+                                var valueType = (int)m["valueType"];
+                                if (valueType == 1)
+                                {
+                                    var value = (double)m["value"];
+                                    client.WriteVirtualPin(id, value);
+                                }
+                            }
+                            if (options.Debug)
+                                Console.WriteLine(m.ToString());
+                        };
+
+                        var closeTcs = new System.Threading.Tasks.TaskCompletionSource<bool>();
+                        Console.CancelKeyPress += (o, e) =>
+                        {
+                            closeTcs.SetResult(true);
+                        };
+                        ws.StartMessageLoop();
+                        Console.WriteLine("Server is active. Press CTRL+C to stop.");
+                        closeTcs.Task.Wait();
+                        Console.WriteLine("Stopping server.");
+                        ws.CloseAsync().Wait();
+                    }
+
+
+
                 }
                 else
                 {

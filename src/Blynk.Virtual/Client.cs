@@ -69,6 +69,11 @@ namespace Blynk.Virtual
         {
             this.Send(Command.HARDWARE, "vw", id.ToString(), value.ToString(CultureInfo.InvariantCulture));
         }
+        public void WriteVirtualPin(int id, string value)
+        {
+            this.Send(Command.HARDWARE, "vw", id.ToString(), value);
+        }
+
         public void SendPing()
         {
             this.Send(Command.PING, null);
