@@ -69,7 +69,7 @@ namespace Telldus
                         {
                             var id = (int)m["id"];
                             var type = (string)m["type"];
-                            var time = (string)m["time"];
+                            var time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                             var name = (string)m["name"];
                             if (type == "device")
                             {
