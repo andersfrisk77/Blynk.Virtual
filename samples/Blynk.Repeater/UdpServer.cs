@@ -50,8 +50,8 @@ namespace Blynk.Repeater
         }
         public void Stop()
         {
-            this.udpClient.Close();
-            this.listener.Wait();
+            this.udpClient?.Close();
+            this.listener?.Wait();
         }
 
         #region IDisposable Support
@@ -65,8 +65,11 @@ namespace Blynk.Repeater
                 {
                     // TODO: dispose managed state (managed objects).
                 }
+                this.Stop();
                 this.udpClient.Dispose();
                 this.listener?.Dispose();
+                this.udpClient = null;
+                this.listener = null;
                 // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
                 // TODO: set large fields to null.
 

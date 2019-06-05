@@ -1,7 +1,8 @@
 ﻿using Blynk.Virtual;
 using PowerArgs;
 using System;
-
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Telldus
@@ -23,14 +24,26 @@ namespace Telldus
 
         [ArgShortcut("t")]
         [ArgShortcut("--telldus")]
-        [ArgDefaultValue("ws://192.168.1.17/ws")]
+        [ArgDefaultValue("")]
         [ArgDescription("The Telldus websocket device uri.")]
         public string Telldus { get; set; }
+
+        [ArgShortcut("i")]
+        [ArgShortcut("--identification")]
+        [ArgDefaultValue("")]
+        [ArgDescription("The Telldus device id.")]
+        public string Identification { get; set; }
 
         [ArgShortcut("d")]
         [ArgShortcut("--debug")]
         [ArgDescription("Show debug information.")]
         public bool Debug { get; set; }
+
+        [ArgShortcut("b")]
+        [ArgShortcut("--broadcast")]
+        [ArgDefaultValue("255.255.255.255")]
+        [ArgDescription("Show debug information.")]
+        public string Broadcast { get; set; }
 
     }
     class Program
@@ -48,6 +61,52 @@ namespace Telldus
                 Console.WriteLine(ArgUsage.GenerateUsageFromTemplate<Options>());
                 return;
             }
+
+            var telldusUri = options.Telldus;
+            if (string.IsNullOrEmpty(telldusUri))
+            {
+                var found = new List<(string Ip, string Id)>();
+                string ip = null;
+                using (var discover = new Discover(30303, options.Broadcast))
+                {
+                    discover.OnFoundDevice += (ipEnd, id) =>
+                    {
+                        found.Add((ipEnd, id));
+                        if (options.Debug)
+                            Console.WriteLine($"ip {ipEnd}, id {id}");
+                    };
+                    discover.Start();
+                    for (int i = 0; i < 10; i++)
+                    {
+                        discover.Send();
+                    }
+                    Task.Delay(2000).Wait();
+                    discover.Stop();
+                }
+                if (string.IsNullOrEmpty(options.Identification))
+                {
+                    ip = found.Select(v => v.Ip).FirstOrDefault();
+                }
+                else
+                {
+                    ip = found.Where(v => v.Item2.Contains(options.Identification)).Select(v => v.Item1).FirstOrDefault();
+                }
+                if (ip != null)
+                {
+                    telldusUri = $"ws://{ip}/ws";
+                }
+                else
+                {
+                    Console.WriteLine($"Cannot find telldus device with id {options.Identification}");
+                    return;
+                }
+            }
+            if (string.IsNullOrEmpty(telldusUri))
+            {
+                Console.WriteLine("Cannot find a telldus device");
+                return;
+            }
+            // Connect to blynk server
             var url = options.Server; // Blynk server address
             var authorization = options.Authorization; // Authorization token
             using (var client = new Client(url, authorization))
@@ -61,8 +120,8 @@ namespace Telldus
                 {
                     Console.WriteLine("Hardware client is authorized with given token");
 
-
-                    using (var ws = new TelldusClient(options.Telldus))
+                    // Connect to Telldus device
+                    using (var ws = new TelldusClient(telldusUri))
                     {
                         ws.ConnectAsync().Wait();
                         ws.OnMessage += m =>
@@ -111,9 +170,6 @@ namespace Telldus
                         Console.WriteLine("Stopping server.");
                         ws.CloseAsync().Wait();
                     }
-
-
-
                 }
                 else
                 {
