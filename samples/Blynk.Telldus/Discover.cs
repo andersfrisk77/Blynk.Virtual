@@ -18,6 +18,8 @@ namespace Telldus
             this.broadcast = broadcast;
             this.socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
             this.socket.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, 1);
+            this.socket.ReceiveTimeout = 100;
+            this.socket.SendTimeout = 100;
         }
         public void Send()
         {
