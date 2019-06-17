@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blynk.Tester", "samples\Bly
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blynk.Telldus", "samples\Blynk.Telldus\Blynk.Telldus.csproj", "{2AF85756-F5E7-4C17-AE8F-1474EFA053CD}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blynk.Power", "samples\Blynk.Power\Blynk.Power.csproj", "{3259E129-8792-43FC-9E26-EBB8F3B4FA65}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{2AF85756-F5E7-4C17-AE8F-1474EFA053CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2AF85756-F5E7-4C17-AE8F-1474EFA053CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2AF85756-F5E7-4C17-AE8F-1474EFA053CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3259E129-8792-43FC-9E26-EBB8F3B4FA65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3259E129-8792-43FC-9E26-EBB8F3B4FA65}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3259E129-8792-43FC-9E26-EBB8F3B4FA65}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3259E129-8792-43FC-9E26-EBB8F3B4FA65}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
