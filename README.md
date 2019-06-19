@@ -10,11 +10,14 @@ In order to test this library the following requirement must be met:
 2. Install and run https://github.com/blynkkk/blynk-server. The Blynk server is a java-based application which has to be accessible to 
    to the device above. For example it can be installed on a Raspberry Pi device.
 
-3. Connect the application (the smart phone application) to the Blynk server and create a new project. Note that there is a authorization token for 
-   the project. This token will be used later when the client is connected to blynk server (and hence identifies itself as the device).
-   On the device main screen add a button with a virtual pin number.
 
-4. Copy the authorization token for the project. Use dotnet commands to publish BlynkTester application:
+## Blynk Tester
+
+1. Connect the application (the smart phone application) to the Blynk server and create a new project. Note that there is a authorization token for 
+   the project. This token will be used later when the client is connected to blynk server (and hence identifies itself as the device).
+   On the device main screen add a push button associated to a certain virtual pin number.
+
+2. Copy the authorization token for the project. Use dotnet commands to publish BlynkTester application:
    1. Use a IOT or computer device that has dotnet sdk installed. 
    2. Clone this repository.
    3. Run "dotnet build samples/Blynk.Tester/Blynk.Tester.csproj"
@@ -26,6 +29,7 @@ In order to test this library the following requirement must be met:
 With this client example it is possible to use the push or pull technology to read sensors or control any kind of software or hardware.
 
 
+## Blynk Repeater
 
 The BlynkRepeater application is just a UDP server together with a Blynk client. The server listens at a port and if a message of type
 
@@ -60,4 +64,12 @@ to send message messages like (manually send by pressing enter):
 11 0
 
 4. Start the device inside the smart phone application. If everything is ok, then the values will show up in the "Value Display" widget.
+
+## Blynk.Power
+
+This application is used to read event caused by a led blinking on a power meter. The power meter has a led that blinks when a certain amount of energy has been consumped. For the meter described in the article
+
+https://www.idg.se/2.1085/1.451521/den-grafiska-elmataren-visar-hela-sanningen
+
+the power is given by P = 3600 / T, where T is the elapsed time between two event in seconds. The application sends the power to the Blynk server so it can be shown on the mobile.
 
