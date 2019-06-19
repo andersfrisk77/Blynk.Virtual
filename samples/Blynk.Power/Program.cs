@@ -34,6 +34,12 @@ namespace Blynk.Power
         public bool Debug { get; set; }
 
     }
+    public enum State
+    {
+        None,
+        Up,
+        Down,
+    }
     class Program
     {
         static void Main(string[] args)
@@ -72,25 +78,71 @@ namespace Blynk.Power
                         controller.OpenPin(pin, PinMode.Input);
                         Console.WriteLine($"GPIO pin enabled for use: {pin}");
 
-                        var watch = new Stopwatch();
+                        var powerWatch = new Stopwatch();
+                        var blinkWatch = new Stopwatch();
+                        var state = State.None;
+                        var previousOk = false;
+                        var blinkTime = 12; // [ms]
                         var risingEventHandler = new PinChangeEventHandler((@object, a) =>
                         {
-                            var elapsed = watch.ElapsedMilliseconds / 1000.0; // elapsed time in seconds
-                            if (elapsed != 0)
+                            if (state == State.Up)
                             {
-                                var power = 3600.0f / elapsed;
                                 if (debug)
-                                    Console.WriteLine($"Power consumption {power}");
-                                client.WriteVirtualPin(pin, power);
+                                    Console.WriteLine($"Invalid. Rising event. State {state}");
+                                state = State.None;
+                                previousOk = false;
                             }
-                            watch.Restart();
-                            if (debug)
-                                Console.WriteLine("Rising");
+                            else
+                            {
+                                state = State.Up;
+                                blinkWatch.Restart();
+                                if (debug)
+                                    Console.WriteLine($"Valid. Rising event.");
+                            }
                         });
                         var fallingEventHandler = new PinChangeEventHandler((@object, a) =>
                         {
-                            if (debug)
-                                Console.WriteLine("Falling");
+                            if (state == State.Up)
+                            {
+                                var elapsedBlinkTime = blinkWatch.ElapsedMilliseconds;
+                                var validBlink = elapsedBlinkTime < blinkTime;
+                                if (validBlink)
+                                {
+                                    if (previousOk)
+                                    {
+                                        var elapsed = powerWatch.ElapsedMilliseconds / 1000.0; // elapsed time in seconds
+                                        if (elapsed != 0)
+                                        {
+                                            var power = Math.Round(3600.0f / elapsed);
+                                            if (debug)
+                                                Console.WriteLine($"Power consumption {power}");
+                                            client.WriteVirtualPin(pin, power);
+                                        }
+                                    }
+                                    state = State.Down;
+                                    previousOk = true;
+                                    powerWatch.Restart();
+                                    if (debug)
+                                        Console.WriteLine("Valid. Falling event.");
+                                }
+                                else
+                                {
+                                    state = State.None;
+                                    previousOk = false;
+                                    if (debug)
+                                        Console.WriteLine($"Invalid. Falling event was too slow. Time {elapsedBlinkTime}");
+                                }
+                            }
+                            else
+                            {
+                                if (debug)
+                                    Console.WriteLine($"Invalid. Falling event. State {state}");
+                                state = State.None;
+                                previousOk = false;
+                            }
+
+
+
                         });
 
                         var source = new TaskCompletionSource<bool>();
