@@ -1,5 +1,5 @@
 This is a small library together with some simple apps used together with the Blynk server. The library is based on BlynkLibrary by
-Sverre Frøystein together with standard TCP client in .NET core. The client will only use virtual pins.
+Sverre Frøystein together with standard TCP client in dotnet core 3.1. The client will only use virtual pins.
 
 The Blynk application for a Iphone or Android device is a very convinient way of handling IOT devices. Read more on https://www.blynk.cc/.
 
